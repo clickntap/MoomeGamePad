@@ -1,2 +1,27 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MooMe Game Pad</title>
+</head>
+<body>
+<script type="text/javascript" src="moome-gamepad.js"></script>
+<script type="text/javascript">
+MooMe.init({
+  channel:'playcanvas.atlk',
+  onReady : function() {
+    MooMe.gameStart();
+  },
+  onMotion : function(yaw,pitch,roll) {
+
+  },
+  onLeft : function() {
+
+  },
+  onRight : function() {
+    
+  }
+});
+</script>
+</body>
 </html>
