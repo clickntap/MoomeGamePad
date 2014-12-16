@@ -46,6 +46,15 @@ var MooMe = (function(settings){
   var _gameScore = function(score){
     _sendData({action:'gameScore',value:score});
   };
+  var _motion = function(yaw,pitch,roll){
+    _sendData({action:'motion',yaw:yaw,pitch:pitch,roll:roll});
+  };
+  var _left = function(){
+    _sendData({action:'left'});
+  };
+  var _right = function(){
+    _sendData({action:'right'});
+  };
   return {
     init :function(settings){
       setupSettings(defaultSettings, settings);
@@ -53,16 +62,21 @@ var MooMe = (function(settings){
       mooMeSocket.onopen = function() {
         _sendData({channel:globalSettings.channel,role:globalSettings.role});
         globalSettings.onReady();
+        console.log('onopen');
+      }
+      mooMeSocket.onerror = function(error) {
+        console.log('onerror: '+error);
       }
       mooMeSocket.onmessage = function(event) {
         var message = JSON.parse(event.data);
+        console.log(event.data);
         if(message.action == 'motion') {
           globalSettings.onMotion(message.yaw,message.pitch,message.roll);
         }
-        if(message.action == 'onLeft') {
+        if(message.action == 'left') {
           globalSettings.onLeft();
         }
-        if(message.action == 'onRight') {
+        if(message.action == 'right') {
           globalSettings.onRight();
         }
       }
@@ -84,6 +98,15 @@ var MooMe = (function(settings){
     },
     gameScore : function(score){
       _gameScore(score);
+    },
+    motion : function(yaw,pitch,roll){
+      _motion(yaw,pitch,roll);
+    },
+    left : function(){
+      _left();
+    },
+    right : function(){
+      _right();
     }
   };
 })();
