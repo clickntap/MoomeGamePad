@@ -1,12 +1,20 @@
 var MooMe = (function(settings){
   var mooMeSocket = 0;
   var defaultSettings = {
-    role : 'player',
+    role : 'game',
     channel : '',
-    onReady : function () { console.log('override onReady function with settings'); },
     onMotion : function (yaw,pitch,roll) { console.log('override onMotion(yaw,pitch,roll) function with settings'); },
     onLeft : function () { console.log('override onLeft function with settings'); },
-    onRight : function () { console.log('override onRight function with settings'); }
+    onRight : function () { console.log('override onRight function with settings'); },
+    onInsertCoin : function () { console.log('override onInsertCoin function with settings'); },
+    onGameStart : function () { console.log('override onGameStart function with settings'); },
+    onGameOver : function () { console.log('override onGameOver function with settings'); },
+    onGameWarning : function () { console.log('override onGameWarning function with settings'); },
+    onGameDanger : function () { console.log('override onGameDanger function with settings'); },
+    onGameSuccess : function () { console.log('override onGameSuccess function with settings'); },
+    onGameScore : function (score) { console.log('override onGameScore(score) function with settings'); },
+    onInsertCoin : function () { console.log('override onInsertCoin function with settings'); },
+    onReady : function () { console.log('override onReady function with settings'); }
   };
   var globalSettings = {};
   var setupSettings = function (defaultSettings, settings) {
@@ -46,6 +54,9 @@ var MooMe = (function(settings){
   var _gameScore = function(score){
     _sendData({action:'gameScore',value:score});
   };
+  var _insertCoin = function(score){
+    _sendData({action:'insertCoin'});
+  };
   var _motion = function(yaw,pitch,roll){
     _sendData({action:'motion',yaw:yaw,pitch:pitch,roll:roll});
   };
@@ -62,10 +73,10 @@ var MooMe = (function(settings){
       mooMeSocket.onopen = function() {
         _sendData({channel:globalSettings.channel,role:globalSettings.role});
         globalSettings.onReady();
-        console.log('onopen');
+        console.log('ok');
       }
       mooMeSocket.onerror = function(error) {
-        console.log('onerror: '+error);
+        console.log('ko: '+error);
       }
       mooMeSocket.onmessage = function(event) {
         var message = JSON.parse(event.data);
@@ -78,6 +89,27 @@ var MooMe = (function(settings){
         }
         if(message.action == 'right') {
           globalSettings.onRight();
+        }
+        if(message.action == 'insertCoin') {
+          globalSettings.onInsertCoin();
+        }
+        if(message.action == 'gameStart') {
+          globalSettings.onGameStart();
+        }
+        if(message.action == 'gameOver') {
+          globalSettings.onGameOver();
+        }
+        if(message.action == 'gameSuccess') {
+          globalSettings.onGameSuccess();
+        }
+        if(message.action == 'gameWarning') {
+          globalSettings.onGameWarning();
+        }
+        if(message.action == 'gameDanger') {
+          globalSettings.onGameDanger();
+        }
+        if(message.action == 'gameScore') {
+          globalSettings.onGameScore(message.value);
         }
       }
     },
@@ -98,6 +130,9 @@ var MooMe = (function(settings){
     },
     gameScore : function(score){
       _gameScore(score);
+    },
+    insertCoin : function(score){
+      _insertCoin(score);
     },
     motion : function(yaw,pitch,roll){
       _motion(yaw,pitch,roll);

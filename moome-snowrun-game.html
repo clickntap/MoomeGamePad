@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MooMe Game Pad</title>
+</head>
+<body>
+<script type="text/javascript" src="moome-gamepad.js"></script>
+<script type="text/javascript">
+MooMe.init({
+  channel:'moome.snowrun',
+  onReady : function() {
+  },
+  onLeft : function() {
+    document.location = 'app:jump';
+  },
+  onRight : function() {
+    document.location = 'app:back';
+  },
+  onInsertCoin : function() {
+    document.location = 'app:newgame';
+  }
+});
+</script>
+<button onclick="MooMe.gameStart()">GAME START</button>
+<button onclick="MooMe.gameOver()">GAME OVER</button>
+<button onclick="MooMe.gameWarning()">GAME WARNING</button>
+<button onclick="MooMe.gameDanger()">GAME DANGER</button>
+<button onclick="MooMe.gameSuccess()">GAME SUCCESS</button>
+<button onclick="MooMe.gameScore(300)">GAME SCORE (300 pt)</button>
+</body>
+</html>
